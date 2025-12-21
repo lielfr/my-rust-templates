@@ -1,0 +1,16 @@
+use axum::{http::StatusCode, response::IntoResponse, routing::get};
+
+async fn health_check() -> impl IntoResponse {
+    (StatusCode::OK, "ok")
+}
+
+pub(crate) fn get_router() -> axum::Router {
+    axum::Router::new().route("/healthz", get(health_check))
+    {% assign routes_split = additional_routes | newline_to_br | strip_newlines | split: '<br />' %}
+    {%- for route in routes_split -%}
+      {% assign route_strip = route | strip %}
+      {%- if route_strip != "" -%}
+        .route("/{{ route_strip }}", get(health_check))
+      {%- endif -%}
+    {%- endfor -%}
+}

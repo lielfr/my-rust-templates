@@ -1,2 +1,5 @@
 [placeholders]
-additional_routes = { prompt = "Which additional routes (Healthcheck is included) would you like?", default = [], type = "array" }
+additional_routes = { prompt = "Which additional routes (Healthcheck is included) would you like? Separated by newlines", type = "text" }
+
+[hooks]
+post = ["post-script.rhai"]
