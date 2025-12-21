@@ -1,0 +1,2 @@
+[placeholders]
+additional_routes = { prompt = "Which additional routes (Healthcheck is included) would you like?", default = [], type = "array" }
