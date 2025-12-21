@@ -34,6 +34,6 @@ async fn main() {
         .init();
 
     if let Err(e) = run_server().await {
-        tracing::error!("{}", format!("{e}"));
+        tracing::error!("{e}");
     }
 }
