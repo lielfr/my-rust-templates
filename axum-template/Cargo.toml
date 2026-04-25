@@ -1,13 +1,25 @@
 [package]
-name = "{{project-name}}"
-version = "0.1.0"
-edition = "2024"
+edition = '2024'
+name = '{{project-name}}'
+version = '0.1.0'
 
 [dependencies]
-anyhow = "1.0.100"
-axum = { version = "0.8.8", features = ["http2", "macros"] }
-serde = { version = "1.0.228", features = ["derive"] }
-serde_json = "1.0.145"
-tokio = { version = "1.48.0", features = ["full"] }
-tracing = "0.1.44"
-tracing-subscriber = { version = "0.3.22", features = ["env-filter", "json"] }
+anyhow = '1.0.102'
+serde_json = '1.0.149'
+tracing = '0.1.44'
+
+[dependencies.axum]
+features = ['http2', 'macros']
+version = '0.8.9'
+
+[dependencies.serde]
+features = ['derive']
+version = '1.0.228'
+
+[dependencies.tokio]
+features = ['full']
+version = '1.52.1'
+
+[dependencies.tracing-subscriber]
+features = ['env-filter', 'json']
+version = '0.3.23'
