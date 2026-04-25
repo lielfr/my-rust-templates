@@ -15,16 +15,14 @@ jobs:
         name: install cargo-edit and cargo-generate
         with:
           tool: cargo-edit,cargo-generate
-      - name: Install dasel
-        run: wget https://github.com/TomWright/dasel/releases/download/v3.4.1/dasel_linux_arm64 -O dasel && chmod +x dasel
       - name: temporarily change package name for cargo-upgrade to work
-        run: cat Cargo.toml | ../dasel -i toml --root "package.name = 'axum-template'" > Cargo2.toml && mv Cargo2.toml Cargo.toml
+        run: sed -i s/\{\{project-name\}\}/axum-template/ Cargo.toml
         working-directory: ./axum-template
       - name: run cargo-upgrade
         run: cargo upgrade
         working-directory: ./axum-template
       - name: restore package name
-        run: cat Cargo.toml | ../dasel -i toml --root "package.name = '\{\{project-name\}\}'" > Cargo2.toml && mv Cargo2.toml Cargo.toml
+        run: sed -i s/axum-template/\{\{project-name\}\}/ Cargo.toml
         working-directory: ./axum-template
       - name: cleanup dasel binary
         run: rm dasel
