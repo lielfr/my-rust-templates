@@ -16,13 +16,13 @@ jobs:
         with:
           tool: cargo-edit,cargo-generate
       - name: temporarily change package name for cargo-upgrade to work
-        run: sed -i "s/\{\{project\-name\}\}/axum-template/" Cargo.toml
+        run: sed -i "s/{{project\-name}}/axum-template/" Cargo.toml
         working-directory: ./axum-template
       - name: run cargo-upgrade
         run: cargo upgrade
         working-directory: ./axum-template
       - name: restore package name
-        run: sed -i "s/axum\-template/\{\{project-name\}\}/" Cargo.toml
+        run: sed -i "s/axum\-template/{{project-name}}/" Cargo.toml
         working-directory: ./axum-template
       - name: cleanup dasel binary
         run: rm dasel
