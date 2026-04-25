@@ -12,7 +12,7 @@ jobs:
         name: Check out repo code
       - uses: dtolnay/rust-toolchain@stable
       - name: Install cargo-edit
-        run: apt-get install -y libssl-dev pkg-config && cargo install cargo-edit
+        run: sudo apt-get install -y libssl-dev pkg-config && cargo install cargo-edit
       - name: Install cargo-generate (for tests)
         run: cargo install cargo-generate
       - name: run cargo-upgrade
