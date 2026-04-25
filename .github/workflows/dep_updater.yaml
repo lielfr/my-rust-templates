@@ -7,6 +7,7 @@ on:
 jobs:
   update-dependencies-axum:
     runs-on: ubuntu-24.04-arm
+    timeout-minutes: 1
     steps:
       - uses: actions/checkout@v6
         name: Check out repo code
@@ -24,8 +25,6 @@ jobs:
       - name: restore package name
         run: sed -i "s/axum\-template/{{project-name}}/" Cargo.toml
         working-directory: ./axum-template
-      - name: cleanup dasel binary
-        run: rm dasel
       - name: verify that build works correctly
         run: echo -e "[values]\nadditional_routes = \"\"" > values.toml && cargo generate -a --path axum-template -n axum-template-test --values-file values.toml && cd axum-template-test && cargo check
       - name: verify that health check works
