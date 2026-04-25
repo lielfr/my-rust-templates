@@ -1,0 +1,52 @@
+name: Dependencies Updater
+on:
+  schedule:
+    - cron: "0 0 * * 1"
+jobs:
+  update-dependencies-axum:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        name: Check out repo code
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install cargo-edit
+        run: apt-get install -y libssl-dev pkg-config && cargo install cargo-edit
+      - name: Install cargo-generate (for tests)
+        run: cargo install cargo-generate
+      - name: run cargo-upgrade
+        run: cargo upgrade
+        working-directory: ./axum-template
+      - name: verify that build works correctly
+        run: echo "[values]" > values.toml && cargo generate --path axum-template -n axum-template-test --values-file values.toml && cd axum-template-text && cargo check
+      - name: run server temporarily in the background
+        env:
+          RUST_LOG: debug
+        working-directory: ./axum-template-test
+        run: cargo run -q &
+      - name: verify that health check works
+        run: |
+          curl http://127.0.0.1:8080/healthz -o test.txt
+          [[ $(cat test.txt) == "ok" ]] || { echo "assertion failed!"; rm test.txt; exit 1; }
+          rm test.txt
+      - name: cleanup template test
+        run: rm -rf axum-template-test
+      - run: git status
+      - run: git add axum-template
+      - name: push new branch
+        run: |
+          export BRANCH_NAME=axum-template-update-$(date +%d%m%y)
+          echo "BRANCH_NAME="$BRANCH_NAME"" >> $GITHUB_ENV
+          git checkout -B $BRANCH_NAME
+          git commit -m "auto-update for axum template's dependencies"
+          git push -u origin $BRANCH_NAME
+      - name: open PR
+        uses: actions/github-script@v9
+        with:
+          script: |
+            github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: "update axum template dependencies",
+              head: process.env.BRANCH_NAME,
+              base: "main"
+            })
