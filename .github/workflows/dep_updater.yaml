@@ -29,7 +29,7 @@ jobs:
       - name: cleanup dasel binary
         run: rm dasel
       - name: verify that build works correctly
-        run: echo "[values]" > values.toml && cargo generate --path axum-template -n axum-template-test --values-file values.toml && cd axum-template-test && cargo check
+        run: echo -e "[values]\nadditional_routes = \"\"" > values.toml && cargo generate -a --path axum-template -n axum-template-test --values-file values.toml && cd axum-template-test && cargo check
       - name: verify that health check works
         working-directory: ./axum-template-test
         run: |
