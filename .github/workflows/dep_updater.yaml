@@ -18,16 +18,15 @@ jobs:
       - name: Install dasel
         run: wget https://github.com/TomWright/dasel/releases/download/v3.4.1/dasel_linux_arm64 -O dasel
       - name: temporarily change package name for cargo-upgrade to work
-        run: cat Cargo.toml | ./dasel -i toml --root "package.name = 'axum-template'" > Cargo.toml
+        run: cat Cargo.toml | ../dasel -i toml --root "package.name = 'axum-template'" > Cargo.toml
         working-directory: ./axum-template
       - name: run cargo-upgrade
         run: cargo upgrade
         working-directory: ./axum-template
       - name: restore package name
-        run: cat Cargo.toml | ./dasel -i toml --root "package.name = '{{'{{project-name}}'}}'" > Cargo.toml
+        run: cat Cargo.toml | ../dasel -i toml --root "package.name = '{{'{{project-name}}'}}'" > Cargo.toml
         working-directory: ./axum-template
       - name: cleanup dasel binary
-        working-directory: ./axum-template
         run: rm dasel
       - name: verify that build works correctly
         run: echo "[values]" > values.toml && cargo generate --path axum-template -n axum-template-test --values-file values.toml && cd axum-template-text && cargo check
